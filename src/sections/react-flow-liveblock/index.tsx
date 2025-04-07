@@ -100,6 +100,7 @@ export function ReactFlowLiveBlock() {
       setRedoStack(redoStack.slice(1));
     }
   };
+
   const onConnect = (params: any) => {
     handleHistory(nodes, edges);
 
