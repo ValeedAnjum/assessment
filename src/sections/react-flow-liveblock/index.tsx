@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   ReactFlow,
   MiniMap,
@@ -70,12 +70,44 @@ const initialEdges = [
 ];
 
 export function ReactFlowLiveBlock() {
-  const [nodes, , onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
-  const onConnect = (params: any) =>
-    setEdges((eds): any => addEdge(params, eds));
+  const [undoStack, setUndoStack] = useState<{ nodes: any; edges: any }[]>([]);
+  const [redoStack, setRedoStack] = useState<{ nodes: any; edges: any }[]>([]);
 
+  const handleHistory = (newNodes: any, newEdges: any) => {
+    setUndoStack((prev) => [...prev, { nodes: newNodes, edges: newEdges }]);
+    setRedoStack([]);
+  };
+
+  const undo = () => {
+    if (undoStack.length > 0) {
+      const lastState = undoStack[undoStack.length - 1];
+      setNodes(lastState.nodes);
+      setEdges(lastState.edges);
+      setRedoStack([{ nodes, edges }, ...redoStack]);
+      setUndoStack(undoStack.slice(0, -1));
+    }
+  };
+
+  const redo = () => {
+    if (redoStack.length > 0) {
+      const lastRedoState = redoStack[0];
+      setNodes(lastRedoState.nodes);
+      setEdges(lastRedoState.edges);
+      setUndoStack([{ nodes, edges }, ...undoStack]);
+      setRedoStack(redoStack.slice(1));
+    }
+  };
+  const onConnect = (params: any) => {
+    handleHistory(nodes, edges);
+
+    setEdges((eds) => {
+      const newEdges = addEdge(params, eds);
+      return newEdges;
+    });
+  };
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
       <ReactFlow
@@ -91,6 +123,15 @@ export function ReactFlowLiveBlock() {
         <MiniMap />
         {/* <Background variant={BackgroundVariant.Dots} gap={12} size={1} /> */}
       </ReactFlow>
+      {/* Undo and Redo buttons */}
+      <div style={{ position: "absolute", top: "20px", left: "20px" }}>
+        <button onClick={undo} disabled={undoStack.length === 0}>
+          Undo
+        </button>
+        <button onClick={redo} disabled={redoStack.length === 0}>
+          Redo
+        </button>
+      </div>
     </div>
   );
 }
