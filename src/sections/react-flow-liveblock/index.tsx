@@ -4,6 +4,7 @@ import { ReactFlow, MiniMap, Controls } from "@xyflow/react";
 import { useOthers, useUpdateMyPresence } from "@liveblocks/react/suspense";
 import "@xyflow/react/dist/style.css";
 import { useReactFlow } from "./use-react-flow";
+import { CollaborativeComments } from "./comments";
 
 // Diffrent Colors for users cursors
 const COLORS = [
@@ -107,7 +108,17 @@ export function ReactFlowLiveBlock() {
           Redo
         </button>
       </div>
-      <div>There are {userCount} other user(s) online</div>
+      <div
+        style={{
+          position: "absolute",
+          top: "20px",
+          right: "20px",
+          width: "20%",
+        }}
+      >
+        <div>{userCount} users online</div>
+        <CollaborativeComments />
+      </div>
     </div>
   );
 }
