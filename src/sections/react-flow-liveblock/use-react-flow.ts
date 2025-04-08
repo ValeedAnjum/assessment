@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { useNodesState, useEdgesState, addEdge } from "@xyflow/react";
+import {
+  useNodesState,
+  useEdgesState,
+  addEdge,
+  NodeChange,
+  EdgeChange,
+} from "@xyflow/react";
 
 import { LiveBlockNode } from "./liveblock-node";
 
@@ -60,11 +66,21 @@ const initialEdges = [
 ];
 
 export function useReactFlow() {
+  // Node and Edges state
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
+  // For Undo And Redo funtioanlity
   const [undoStack, setUndoStack] = useState<{ nodes: any; edges: any }[]>([]);
   const [redoStack, setRedoStack] = useState<{ nodes: any; edges: any }[]>([]);
+
+  // For isDargging state and snapshot state for
+  // prevent too much state changes during node dragging
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragSnapshot, setDragSnapshot] = useState<{
+    nodes: any[];
+    edges: any[];
+  } | null>(null);
 
   const handleHistory = (newNodes: any, newEdges: any) => {
     setUndoStack((prev) => [...prev, { nodes: newNodes, edges: newEdges }]);
@@ -99,13 +115,44 @@ export function useReactFlow() {
       return newEdges;
     });
   };
+
+  // Store initial state while drag starts
+  const onNodeDragStart = () => {
+    setDragSnapshot({ nodes, edges });
+    setIsDragging(true);
+  };
+
+  // Commit drag changes to undo stack when drag finish
+  const onNodeDragStop = () => {
+    if (!dragSnapshot) return;
+
+    setIsDragging(false);
+    handleHistory(dragSnapshot.nodes, dragSnapshot.edges);
+    setDragSnapshot(null);
+  };
+
+  // drag detection added
+  const onNodesChangeWrapped = (changes: NodeChange[]) => {
+    if (!isDragging) {
+      handleHistory(nodes, edges);
+    }
+    onNodesChange(changes as any);
+  };
+
+  const onEdgesChangeWrapped = (changes: EdgeChange[]) => {
+    handleHistory(nodes, edges);
+    onEdgesChange(changes as any);
+  };
+
   return {
     nodes,
     edges,
     nodeTypes,
     onConnect,
-    onNodesChange,
-    onEdgesChange,
+    onNodesChange: onNodesChangeWrapped,
+    onEdgesChange: onEdgesChangeWrapped,
+    onNodeDragStart,
+    onNodeDragStop,
     undo,
     redo,
     undoStack,

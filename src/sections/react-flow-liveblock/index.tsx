@@ -13,6 +13,8 @@ export function ReactFlowLiveBlock() {
     onConnect,
     onNodesChange,
     onEdgesChange,
+    onNodeDragStart,
+    onNodeDragStop,
     undo,
     redo,
     undoStack,
@@ -27,6 +29,8 @@ export function ReactFlowLiveBlock() {
         onConnect={onConnect}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
+        onNodeDragStart={onNodeDragStart}
+        onNodeDragStop={onNodeDragStop}
         defaultViewport={{ zoom: 5, x: 1, y: 1 }}
       >
         <Controls />
