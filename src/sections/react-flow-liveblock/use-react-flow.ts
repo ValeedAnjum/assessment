@@ -8,7 +8,7 @@ import {
 } from "@xyflow/react";
 
 import { LiveBlockNode } from "./liveblock-node";
-import { useStorage } from "@liveblocks/react/suspense";
+
 const nodeTypes = {
   liveBlockNode: LiveBlockNode,
 };
@@ -66,8 +66,6 @@ const initialEdges = [
 ];
 
 export function useReactFlow() {
-  const person = useStorage((root) => root);
-  console.log(person);
   // Node and Edges state
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
