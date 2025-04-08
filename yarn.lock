@@ -238,6 +238,26 @@
   resolved "https://registry.yarnpkg.com/@img/sharp-win32-x64/-/sharp-win32-x64-0.33.5.tgz#56f00962ff0c4e0eb93d34a047d29fa995e3e342"
   integrity sha512-MpY/o8/8kj+EcnxwvrP4aTJSWw/aZ7JIGR4aBeZkZw5B7/Jn+tY9/VNwtcoGmdT7GfggGIU4kygOMSbYnOrAbg==
 
+"@liveblocks/client@2.22.3", "@liveblocks/client@^2.22.3":
+  version "2.22.3"
+  resolved "https://registry.yarnpkg.com/@liveblocks/client/-/client-2.22.3.tgz#1d68d1c2282fe1a8ec72c05950af25d0ffd33fb8"
+  integrity sha512-KnOFtaK6A+w+qlmhEF74o4+NQ2bwoGx9xBZUO0ZoI5sSYXsqiIQk40BHPPVraAEtb33VlkecyCiErOq4+BKwvA==
+  dependencies:
+    "@liveblocks/core" "2.22.3"
+
+"@liveblocks/core@2.22.3":
+  version "2.22.3"
+  resolved "https://registry.yarnpkg.com/@liveblocks/core/-/core-2.22.3.tgz#b7da0ca887e9402e46ab329866011eebf1d78a84"
+  integrity sha512-G0WdcyjVkhvSB6Ud2GGa1Gklps/VbhoiXwv6hjxNqU4AA+UO8D3z6ZfB2vQJdRkuV1+VBvyBilHAi2OA1/t+IA==
+
+"@liveblocks/react@^2.22.3":
+  version "2.22.3"
+  resolved "https://registry.yarnpkg.com/@liveblocks/react/-/react-2.22.3.tgz#0fa213dbd54e9d02e9b2a1198b12bdf100acca2e"
+  integrity sha512-b5Kr19vYLwyR53Yt+yskGRCsmiPlyevURQCyC8ilhKcTTYSL9DcGhJw8hAu2KSZJ6bnSU6JD6jhlF5Ysz/zj4w==
+  dependencies:
+    "@liveblocks/client" "2.22.3"
+    "@liveblocks/core" "2.22.3"
+
 "@napi-rs/wasm-runtime@^0.2.8":
   version "0.2.8"
   resolved "https://registry.yarnpkg.com/@napi-rs/wasm-runtime/-/wasm-runtime-0.2.8.tgz#642e8390ee78ed21d6b79c467aa610e249224ed6"
