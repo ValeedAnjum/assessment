@@ -6,6 +6,7 @@ import {
   RoomProvider,
   ClientSideSuspense,
 } from "@liveblocks/react/suspense";
+import { LiveObject } from "@liveblocks/client";
 
 const initialNodes = [
   {
@@ -67,10 +68,11 @@ export function LiveBlockRoom({ children }: { children: ReactNode }) {
         id="ReactFlow_LiveBlock"
         initialPresence={{ cursor: null }}
         initialStorage={{
-          nodes: initialNodes,
-          edges: initialEdges,
-          undoStack: [],
-          redoStack: [],
+          myLiveObject: new LiveObject({ count: 0 }),
+          flowdata: new LiveObject({
+            nodes: initialNodes,
+            edges: initialEdges,
+          }),
         }}
       >
         <ClientSideSuspense fallback={<div>Loading…</div>}>

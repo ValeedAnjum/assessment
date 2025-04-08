@@ -1,8 +1,6 @@
 import { useNodesState, useEdgesState, addEdge } from "@xyflow/react";
 
 import { LiveBlockNode } from "./liveblock-node";
-import { useMutation, useStorage } from "@liveblocks/react/suspense";
-import { useEffect } from "react";
 
 const nodeTypes = {
   liveBlockNode: LiveBlockNode,
@@ -61,37 +59,16 @@ const initialEdges = [
 ];
 
 export function useReactFlow() {
-  const liveEdges = useStorage((root: any) => root.flowdata.edges);
-  // console.log(test);
   // Node and Edges state
   const [nodes, , onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
-  const updateEdges = useMutation(
-    // Mutation context is passed as the first argument
-    ({ storage }: any, edges: any) => {
-      // const count = storage.get("flowdata").get("edges");
-      storage.get("flowdata").set("edges", edges);
-    },
-    []
-  );
-
   const onConnect = (params: any) => {
     setEdges((eds) => {
       const newEdges = addEdge(params, eds);
-
-      // Update Liveblocks storage
-      setTimeout(() => {
-        updateEdges(newEdges);
-      }, 0);
-
       return newEdges;
     });
   };
-
-  useEffect(() => {
-    setEdges(liveEdges);
-  }, [liveEdges, setEdges]);
 
   return {
     nodes,
