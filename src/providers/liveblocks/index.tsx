@@ -68,7 +68,6 @@ export function LiveBlockRoom({ children }: { children: ReactNode }) {
         id="ReactFlow_LiveBlock"
         initialPresence={{ cursor: null }}
         initialStorage={{
-          myLiveObject: new LiveObject({ count: 0 }),
           flowdata: new LiveObject({
             nodes: initialNodes,
             edges: initialEdges,
