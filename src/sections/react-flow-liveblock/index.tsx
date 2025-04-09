@@ -5,6 +5,8 @@ import { useOthers, useUpdateMyPresence } from "@liveblocks/react/suspense";
 import "@xyflow/react/dist/style.css";
 import { useReactFlow } from "./use-react-flow";
 import { CollaborativeComments } from "./comments";
+import { LiveAvatars } from "./live-avatar";
+// import { LiveAvatars } from "./live-avatar";
 
 // Diffrent Colors for users cursors
 const COLORS = [
@@ -103,6 +105,19 @@ export function ReactFlowLiveBlock() {
         <button onClick={redo} disabled={!canRedo}>
           Redo
         </button>
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          top: "20px",
+          right: "20%",
+          width: "20%",
+        }}
+      >
+        <div>
+          {userCount} Avatars
+          <LiveAvatars />
+        </div>
       </div>
       <div
         style={{
