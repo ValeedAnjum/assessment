@@ -1,5 +1,4 @@
 import { useNodesState, useEdgesState, addEdge } from "@xyflow/react";
-
 import { LiveBlockNode } from "./liveblock-node";
 import { useMutation, useStorage } from "@liveblocks/react/suspense";
 import { useEffect, useRef } from "react";
@@ -61,70 +60,85 @@ const initialEdges = [
 ];
 
 export function useReactFlow() {
-  const liveEdges = useStorage((root: any) => root.flowdata.edges);
   const liveNodes = useStorage((root: any) => root.flowdata.nodes);
-  // console.log(test);
-  // Node and Edges state
+  const liveEdges = useStorage((root: any) => root.flowdata.edges);
+
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  // Track if we're in the middle of an update
-  const isUpdatingRef = useRef(false);
+
   const updateNodes = useMutation(({ storage }: any, nodes: any) => {
     storage.get("flowdata").set("nodes", nodes);
   }, []);
-  // Custom nodes change handler to sync with Liveblocks
+  const updateEdges = useMutation(({ storage }: any, edges: any) => {
+    storage.get("flowdata").set("edges", edges);
+  }, []);
+
+  const skipNextSyncRef = useRef(false);
+  const initializedRef = useRef(false);
+
+  //state from Liveblocks on first mount
+  useEffect(() => {
+    if (!initializedRef.current && liveNodes && liveEdges) {
+      initializedRef.current = true;
+
+      const initNodes = liveNodes.length > 0 ? liveNodes : initialNodes;
+      const initEdges = liveEdges.length > 0 ? liveEdges : initialEdges;
+
+      setNodes(initNodes);
+      setEdges(initEdges);
+
+      // populate Liveblocks if empty
+      if (liveNodes.length === 0) updateNodes(initNodes);
+      if (liveEdges.length === 0) updateEdges(initEdges);
+    }
+  }, [liveNodes, liveEdges]);
+
+  // Sync changes from Liveblocks (other users)
+  useEffect(() => {
+    if (skipNextSyncRef.current) {
+      skipNextSyncRef.current = false;
+      return;
+    }
+    if (initializedRef.current && liveNodes) {
+      setNodes(liveNodes);
+    }
+  }, [liveNodes]);
+
+  useEffect(() => {
+    if (skipNextSyncRef.current) {
+      skipNextSyncRef.current = false;
+      return;
+    }
+    if (initializedRef.current && liveEdges) {
+      setEdges(liveEdges);
+    }
+  }, [liveEdges]);
+
   const handleNodesChange = (changes: any) => {
     onNodesChange(changes);
-
-    // After React Flow processes the node changes, update Liveblocks
-    setTimeout(() => {
-      setNodes((currentNodes) => {
-        updateNodes(currentNodes);
-        return currentNodes;
-      });
-    }, 0);
+    setNodes((currentNodes) => {
+      skipNextSyncRef.current = true;
+      queueMicrotask(() => updateNodes(currentNodes));
+      return currentNodes;
+    });
   };
-  const updateEdges = useMutation(
-    // Mutation context is passed as the first argument
-    ({ storage }: any, edges: any) => {
-      // const count = storage.get("flowdata").get("edges");
-      storage.get("flowdata").set("edges", edges);
-    },
-    []
-  );
+
+  const handleEdgesChange = (changes: any) => {
+    onEdgesChange(changes);
+    setEdges((currentEdges) => {
+      skipNextSyncRef.current = true;
+      queueMicrotask(() => updateEdges(currentEdges));
+      return currentEdges;
+    });
+  };
 
   const onConnect = (params: any) => {
     setEdges((eds) => {
       const newEdges = addEdge(params, eds);
-
-      // Update Liveblocks storage
-      setTimeout(() => {
-        updateEdges(newEdges);
-      }, 0);
-
+      skipNextSyncRef.current = true;
+      queueMicrotask(() => updateEdges(newEdges));
       return newEdges;
     });
-  };
-
-  useEffect(() => {
-    setEdges(liveEdges);
-  }, [liveEdges, setEdges]);
-
-  useEffect(() => {
-    setNodes(liveNodes);
-  }, [liveNodes, setNodes]);
-
-  // Custom edges change handler to sync with Liveblocks - no useCallback
-  const handleEdgesChange = (changes: any) => {
-    onEdgesChange(changes);
-
-    // After React Flow processes the edge changes, update Liveblocks
-    setTimeout(() => {
-      setEdges((currentEdges) => {
-        updateEdges(currentEdges);
-        return currentEdges;
-      });
-    }, 0);
   };
 
   return {
