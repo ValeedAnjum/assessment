@@ -9,9 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@liveblocks/client": "^2.22.3",
     "@liveblocks/react": "^2.22.3",
     "@liveblocks/react-ui": "^2.22.3",
+    "@mui/material": "^7.0.1",
     "@types/lodash": "^4.17.16",
     "@xyflow/react": "^12.5.5",
     "lodash": "^4.17.21",

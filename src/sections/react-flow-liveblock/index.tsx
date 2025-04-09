@@ -6,7 +6,6 @@ import "@xyflow/react/dist/style.css";
 import { useReactFlow } from "./use-react-flow";
 import { CollaborativeComments } from "./comments";
 import { LiveAvatars } from "./live-avatar";
-// import { LiveAvatars } from "./live-avatar";
 
 // Diffrent Colors for users cursors
 const COLORS = [
@@ -24,30 +23,48 @@ type Props = {
   color: string;
   x: number;
   y: number;
+  connectionId: number;
 };
 
-function Cursor({ color, x, y }: Props) {
+const Cursor = ({ x, y, color, connectionId }: Props) => {
   return (
-    <svg
+    <div
       style={{
         position: "absolute",
         left: 0,
         top: 0,
         transform: `translateX(${x}px) translateY(${y}px)`,
+        pointerEvents: "none",
       }}
-      width="24"
-      height="36"
-      viewBox="0 0 24 36"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
     >
-      <path
-        d="M5.65376 12.3673H5.46026L5.31717 12.4976L0.500002 16.8829L0.500002 1.19841L11.7841 12.3673H5.65376Z"
-        fill={color}
-      />
-    </svg>
+      <svg
+        width="24"
+        height="36"
+        viewBox="0 0 24 36"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M5.65376 12.3673H5.46026L5.31717 12.4976L0.500002 16.8829L0.500002 1.19841L11.7841 12.3673H5.65376Z"
+          fill={color}
+        />
+      </svg>
+      <p
+        style={{
+          position: "absolute",
+          top: "-5%",
+          left: "80%",
+          fontSize: "10px",
+
+          padding: "0.5em",
+          borderRadius: "0.2rem",
+        }}
+      >
+        {connectionId}
+      </p>
+    </div>
   );
-}
+};
 
 export function ReactFlowLiveBlock() {
   const {
@@ -77,6 +94,7 @@ export function ReactFlowLiveBlock() {
       {others.map(({ connectionId, presence }: any) =>
         presence.cursor ? (
           <Cursor
+            connectionId={connectionId}
             key={connectionId}
             x={presence.cursor.x}
             y={presence.cursor.y}
