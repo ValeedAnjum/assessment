@@ -2,7 +2,7 @@ import { useNodesState, useEdgesState, addEdge } from "@xyflow/react";
 
 import { LiveBlockNode } from "./liveblock-node";
 import { useMutation, useStorage } from "@liveblocks/react/suspense";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 const nodeTypes = {
   liveBlockNode: LiveBlockNode,
@@ -62,11 +62,28 @@ const initialEdges = [
 
 export function useReactFlow() {
   const liveEdges = useStorage((root: any) => root.flowdata.edges);
+  const liveNodes = useStorage((root: any) => root.flowdata.nodes);
   // console.log(test);
   // Node and Edges state
-  const [nodes, , onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  // Track if we're in the middle of an update
+  const isUpdatingRef = useRef(false);
+  const updateNodes = useMutation(({ storage }: any, nodes: any) => {
+    storage.get("flowdata").set("nodes", nodes);
+  }, []);
+  // Custom nodes change handler to sync with Liveblocks
+  const handleNodesChange = (changes: any) => {
+    onNodesChange(changes);
 
+    // After React Flow processes the node changes, update Liveblocks
+    setTimeout(() => {
+      setNodes((currentNodes) => {
+        updateNodes(currentNodes);
+        return currentNodes;
+      });
+    }, 0);
+  };
   const updateEdges = useMutation(
     // Mutation context is passed as the first argument
     ({ storage }: any, edges: any) => {
@@ -93,12 +110,29 @@ export function useReactFlow() {
     setEdges(liveEdges);
   }, [liveEdges, setEdges]);
 
+  useEffect(() => {
+    setNodes(liveNodes);
+  }, [liveNodes, setNodes]);
+
+  // Custom edges change handler to sync with Liveblocks - no useCallback
+  const handleEdgesChange = (changes: any) => {
+    onEdgesChange(changes);
+
+    // After React Flow processes the edge changes, update Liveblocks
+    setTimeout(() => {
+      setEdges((currentEdges) => {
+        updateEdges(currentEdges);
+        return currentEdges;
+      });
+    }, 0);
+  };
+
   return {
     nodes,
     edges,
     nodeTypes,
     onConnect,
-    onNodesChange,
-    onEdgesChange,
+    onNodesChange: handleNodesChange,
+    onEdgesChange: handleEdgesChange,
   };
 }
