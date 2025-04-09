@@ -48,8 +48,18 @@ function Cursor({ color, x, y }: Props) {
 }
 
 export function ReactFlowLiveBlock() {
-  const { nodes, edges, nodeTypes, onConnect, onNodesChange, onEdgesChange } =
-    useReactFlow();
+  const {
+    nodes,
+    edges,
+    nodeTypes,
+    onConnect,
+    onNodesChange,
+    onEdgesChange,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
+  } = useReactFlow();
   const others = useOthers();
   const userCount = others.length;
   const updateMyPresence = useUpdateMyPresence();
@@ -86,14 +96,14 @@ export function ReactFlowLiveBlock() {
         {/* <Background variant={BackgroundVariant.Dots} gap={12} size={1} /> */}
       </ReactFlow>
       {/* Undo and Redo buttons */}
-      {/* <div style={{ position: "absolute", top: "20px", left: "20px" }}>
-        <button onClick={undo} disabled={undoStack.length === 0}>
+      <div style={{ position: "absolute", top: "20px", left: "20px" }}>
+        <button onClick={undo} disabled={!canUndo}>
           Undo
         </button>
-        <button onClick={redo} disabled={redoStack.length === 0}>
+        <button onClick={redo} disabled={!canRedo}>
           Redo
         </button>
-      </div> */}
+      </div>
       <div
         style={{
           position: "absolute",

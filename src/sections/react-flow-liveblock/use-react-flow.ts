@@ -1,6 +1,13 @@
 import { useNodesState, useEdgesState, addEdge } from "@xyflow/react";
 import { LiveBlockNode } from "./liveblock-node";
-import { useMutation, useStorage } from "@liveblocks/react/suspense";
+import {
+  useCanRedo,
+  useCanUndo,
+  useMutation,
+  useRedo,
+  useStorage,
+  useUndo,
+} from "@liveblocks/react/suspense";
 import { useEffect, useRef } from "react";
 
 const nodeTypes = {
@@ -63,6 +70,11 @@ export function useReactFlow() {
   const liveNodes = useStorage((root: any) => root.flowdata.nodes);
   const liveEdges = useStorage((root: any) => root.flowdata.edges);
 
+  const undo = useUndo();
+  const redo = useRedo();
+
+  const canUndo = useCanUndo();
+  const canRedo = useCanRedo();
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
@@ -148,5 +160,9 @@ export function useReactFlow() {
     onConnect,
     onNodesChange: handleNodesChange,
     onEdgesChange: handleEdgesChange,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
   };
 }
