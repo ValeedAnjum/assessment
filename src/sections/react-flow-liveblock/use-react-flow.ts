@@ -10,6 +10,7 @@ import {
 } from "@liveblocks/react/suspense";
 import { useEffect, useRef } from "react";
 import { initialEdges, initialNodes } from "./data";
+import { throttle } from "lodash";
 
 const nodeTypes = {
   liveBlockNode: LiveBlockNode,
@@ -27,11 +28,40 @@ export function useReactFlow() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
+  // const sendUpdateToServer = ({ nodes, edges }: any) => {
+  //   try {
+  //     const saveData = async () => {
+  //       await fetch("http://localhost:5000/flow/update", {
+  //         method: "POST",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify({ nodes, edges }),
+  //       });
+  //     };
+  //     saveData();
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  const sendUpdateToServer = throttle(async ({ nodes, edges }) => {
+    try {
+      await fetch("http://localhost:5000/flow/update", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nodes, edges }),
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }, 300);
+
   const updateNodes = useMutation(({ storage }: any, nodes: any) => {
     storage.get("flowdata").set("nodes", nodes);
+    sendUpdateToServer({ nodes });
   }, []);
   const updateEdges = useMutation(({ storage }: any, edges: any) => {
     storage.get("flowdata").set("edges", edges);
+    sendUpdateToServer({ edges });
   }, []);
 
   const skipNextSyncRef = useRef(false);
