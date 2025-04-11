@@ -1,6 +1,12 @@
 "use client";
 
-import { ReactFlow, MiniMap, Controls } from "@xyflow/react";
+import {
+  ReactFlow,
+  MiniMap,
+  Controls,
+  Background,
+  BackgroundVariant,
+} from "@xyflow/react";
 import { useOthers, useUpdateMyPresence } from "@liveblocks/react/suspense";
 import "@xyflow/react/dist/style.css";
 import { useReactFlow } from "./use-react-flow";
@@ -108,11 +114,11 @@ export function ReactFlowLiveBlock() {
         onConnect={onConnect}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
-        defaultViewport={{ zoom: 5, x: 1, y: 1 }}
+        // defaultViewport={{ zoom: 5, x: 1, y: 1 }}
       >
         <Controls />
         <MiniMap />
-        {/* <Background variant={BackgroundVariant.Dots} gap={12} size={1} /> */}
+        <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
       </ReactFlow>
       {/* Undo and Redo buttons */}
       <div style={{ position: "absolute", top: "1.25rem", left: "1.25rem" }}>

@@ -1,5 +1,6 @@
 import { useNodesState, useEdgesState, addEdge } from "@xyflow/react";
 import { LiveBlockNode } from "./liveblock-node";
+import { LiveBlockNodeWithComments } from "./liveblock-node-with-comments";
 import {
   useCanRedo,
   useCanUndo,
@@ -14,6 +15,7 @@ import { throttle } from "lodash";
 
 const nodeTypes = {
   liveBlockNode: LiveBlockNode,
+  liveBlockNodeWithComments: LiveBlockNodeWithComments,
 };
 
 export function useReactFlow() {
@@ -27,21 +29,6 @@ export function useReactFlow() {
   const canRedo = useCanRedo();
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-
-  // const sendUpdateToServer = ({ nodes, edges }: any) => {
-  //   try {
-  //     const saveData = async () => {
-  //       await fetch("http://localhost:5000/flow/update", {
-  //         method: "POST",
-  //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify({ nodes, edges }),
-  //       });
-  //     };
-  //     saveData();
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   const sendUpdateToServer = throttle(async ({ nodes, edges }) => {
     try {
