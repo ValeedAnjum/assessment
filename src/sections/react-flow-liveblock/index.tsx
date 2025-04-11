@@ -54,9 +54,8 @@ const Cursor = ({ x, y, color, connectionId }: Props) => {
           position: "absolute",
           top: "-5%",
           left: "80%",
-          fontSize: "10px",
-
-          padding: "0.5em",
+          fontSize: "0.625rem",
+          padding: "0.5rem",
           borderRadius: "0.2rem",
         }}
       >
@@ -116,7 +115,7 @@ export function ReactFlowLiveBlock() {
         {/* <Background variant={BackgroundVariant.Dots} gap={12} size={1} /> */}
       </ReactFlow>
       {/* Undo and Redo buttons */}
-      <div style={{ position: "absolute", top: "20px", left: "20px" }}>
+      <div style={{ position: "absolute", top: "1.25rem", left: "1.25rem" }}>
         <button onClick={undo} disabled={!canUndo}>
           Undo
         </button>
@@ -127,7 +126,7 @@ export function ReactFlowLiveBlock() {
       <div
         style={{
           position: "absolute",
-          top: "20px",
+          top: "1.25rem",
           right: "20%",
           width: "20%",
         }}
@@ -140,8 +139,8 @@ export function ReactFlowLiveBlock() {
       <div
         style={{
           position: "absolute",
-          top: "20px",
-          right: "20px",
+          top: "1.25rem",
+          right: "1.25rem",
           width: "20%",
         }}
       >

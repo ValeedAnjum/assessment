@@ -17,7 +17,7 @@ const initialNodes = [
       label: "Multiplayer",
       handles: [{ type: "source", position: "Bottom", id: "1-h1" }],
     },
-    style: { border: "1px solid #1a192b", borderRadius: "5px" },
+    style: { border: "0.063rem solid #1a192b", borderRadius: "0.313rem" },
   },
   {
     type: "liveBlockNode",
@@ -30,7 +30,7 @@ const initialNodes = [
         { type: "source", position: "Bottom", id: "2-h2" },
       ],
     },
-    style: { border: "1px solid #1a192b", borderRadius: "5px" },
+    style: { border: "0.063rem solid #1a192b", borderRadius: "0.313rem" },
   },
   {
     type: "liveBlockNode",
@@ -40,7 +40,11 @@ const initialNodes = [
       label: "LiveBlock",
       handles: [{ type: "target", position: "Top", id: "3-h1" }],
     },
-    style: { border: "1px solid rgb(148, 77, 250)", borderRadius: "5px" },
+
+    style: {
+      border: "0.063rem solid rgb(148, 77, 250)",
+      borderRadius: "0.313rem",
+    },
   },
   {
     id: "4",
@@ -53,7 +57,10 @@ const initialNodes = [
         { type: "source", position: "Bottom", id: "4-h2" },
       ],
     },
-    style: { border: "1px solid rgb(255, 0, 114)", borderRadius: "5px" },
+    style: {
+      border: "0.063rem solid rgb(255, 0, 114)",
+      borderRadius: "0.313rem",
+    },
   },
 ];
 const initialEdges = [
