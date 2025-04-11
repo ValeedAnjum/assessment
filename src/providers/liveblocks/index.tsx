@@ -6,7 +6,7 @@ import {
   RoomProvider,
   ClientSideSuspense,
 } from "@liveblocks/react/suspense";
-import { LiveObject } from "@liveblocks/client";
+import { LiveMap, LiveObject } from "@liveblocks/client";
 import {
   initialEdges,
   initialNodes,
@@ -21,6 +21,7 @@ export function LiveBlockRoom({ children }: { children: ReactNode }) {
         id="ReactFlow_LiveBlock"
         initialPresence={{ cursor: null }}
         initialStorage={{
+          comments: new LiveMap(),
           flowdata: new LiveObject({
             nodes: initialNodes,
             edges: initialEdges,

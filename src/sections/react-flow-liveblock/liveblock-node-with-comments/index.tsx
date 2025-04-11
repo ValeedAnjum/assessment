@@ -1,8 +1,9 @@
 import { Handle, Position } from "@xyflow/react";
 import MapsUgcIcon from "@mui/icons-material/MapsUgc";
-import { Box } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import { useRef, useState } from "react";
-import { CommentsForEachNode } from "./comments-for-each-node";
+import ClearIcon from "@mui/icons-material/Clear";
+import NodeComments from "./comments-for-each-node";
 export function LiveBlockNodeWithComments({ id, data }: any) {
   const hideTimeoutRef: any = useRef(null);
   const [displayComments, setDisplayComments] = useState(false);
@@ -58,6 +59,9 @@ export function LiveBlockNodeWithComments({ id, data }: any) {
               height: "400px",
               border: "1px solid black",
               borderRadius: "5px",
+              backgroundColor: "white",
+              display: "flex",
+              flexDirection: "column",
             }}
           >
             <Box>
@@ -70,8 +74,18 @@ export function LiveBlockNodeWithComments({ id, data }: any) {
               >
                 Comments
               </h1>
-              <CommentsForEachNode />
             </Box>
+            <NodeComments nodeId={id} />
+            <IconButton
+              sx={{
+                position: "absolute",
+                top: "0",
+                right: "0",
+              }}
+              onClick={() => setDisplayComments(false)}
+            >
+              <ClearIcon />
+            </IconButton>
           </Box>
         )}
       </div>

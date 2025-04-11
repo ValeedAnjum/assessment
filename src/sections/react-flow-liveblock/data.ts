@@ -74,6 +74,22 @@ export const initialNodes = [
       borderRadius: "0.313rem",
     },
   },
+  {
+    id: "6",
+    type: "liveBlockNodeWithComments",
+    position: { x: 400, y: 300 },
+    data: {
+      label: "Comments 2",
+      handles: [
+        { type: "target", position: "Top", id: "4-h1" },
+        { type: "source", position: "Bottom", id: "4-h2" },
+      ],
+    },
+    style: {
+      border: "0.063rem solid rgb(255, 0, 114)",
+      borderRadius: "0.313rem",
+    },
+  },
 ];
 export const initialEdges = [
   { id: "e4-3", source: "4", target: "3", animated: true, label: "and" },
