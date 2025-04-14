@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signIn } from "@/lib/auth";
-import { useAuth } from "@/context/AuthContext";
+import { signUp } from "@/lib/auth";
 import Link from "next/link";
 import {
   Box,
@@ -18,54 +17,34 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
 
-export default function LoginPage() {
+export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-  const [submitting, setSubmitting] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { user, loading } = useAuth();
-
-  // Handle redirect after authentication
-  useEffect(() => {
-    if (!loading && user) {
-      router.push("/dashboard");
-    }
-  }, [user, loading, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
     try {
       setError("");
-      setSubmitting(true);
-      await signIn(email, password);
-      // The auth state change will trigger the redirect in the useEffect
+      setLoading(true);
+      await signUp(email, password);
+      router.push("/dashboard");
     } catch (err) {
       setError((err as Error).message);
-      setSubmitting(false);
+      setLoading(false);
     }
   };
-
-  if (loading) {
-    return (
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100vh",
-          }}
-        >
-          <CircularProgress />
-        </Box>
-      </Container>
-    );
-  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -81,10 +60,10 @@ export default function LoginPage() {
         }}
       >
         <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-          <LockOutlinedIcon />
+          <HowToRegIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Sign Up
         </Typography>
 
         {error && (
@@ -114,31 +93,40 @@ export default function LoginPage() {
             label="Password"
             type="password"
             id="password"
-            autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            inputProps={{ minLength: 6 }}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="confirmPassword"
+            label="Confirm Password"
+            type="password"
+            id="confirmPassword"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            inputProps={{ minLength: 6 }}
           />
           <Button
             type="submit"
             fullWidth
             variant="contained"
-            disabled={submitting}
+            disabled={loading}
             sx={{ mt: 3, mb: 2 }}
           >
-            {submitting ? <CircularProgress size={24} /> : "Sign In"}
+            {loading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              "Sign Up"
+            )}
           </Button>
-          <Grid container>
+          <Grid container justifyContent="flex-end">
             <Grid>
-              <Link href="/forgot-password" style={{ textDecoration: "none" }}>
+              <Link href="/" style={{ textDecoration: "none" }}>
                 <Typography variant="body2" color="primary">
-                  Forgot password?
-                </Typography>
-              </Link>
-            </Grid>
-            <Grid>
-              <Link href="/signup" style={{ textDecoration: "none" }}>
-                <Typography variant="body2" color="primary">
-                  {"Don't have an account? Sign Up"}
+                  Already have an account? Sign in
                 </Typography>
               </Link>
             </Grid>

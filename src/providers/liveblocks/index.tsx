@@ -11,6 +11,7 @@ import {
   initialEdges,
   initialNodes,
 } from "@/sections/react-flow-liveblock/data";
+import { Box, CircularProgress, Container, CssBaseline } from "@mui/material";
 
 export function LiveBlockRoom({ children }: { children: ReactNode }) {
   return (
@@ -28,7 +29,23 @@ export function LiveBlockRoom({ children }: { children: ReactNode }) {
           }),
         }}
       >
-        <ClientSideSuspense fallback={<div>Loading…</div>}>
+        <ClientSideSuspense
+          fallback={
+            <Container component="main" maxWidth="md">
+              <CssBaseline />
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100vh",
+                }}
+              >
+                <CircularProgress />
+              </Box>
+            </Container>
+          }
+        >
           {children}
         </ClientSideSuspense>
       </RoomProvider>

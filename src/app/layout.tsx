@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { LiveBlockRoom } from "@/providers";
+import { AuthProvider } from "@/context/AuthContext";
 
 export const metadata: Metadata = {
   title: "Assessment day 1",
@@ -15,7 +16,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <LiveBlockRoom>{children}</LiveBlockRoom>
+        <AuthProvider>
+          <LiveBlockRoom>{children}</LiveBlockRoom>
+        </AuthProvider>
       </body>
     </html>
   );

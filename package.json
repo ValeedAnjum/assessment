@@ -19,6 +19,7 @@
     "@types/lodash": "^4.17.16",
     "@xyflow/react": "^12.5.5",
     "dayjs": "^1.11.13",
+    "firebase": "^11.6.0",
     "lodash": "^4.17.21",
     "lodash.throttle": "^4.1.1",
     "next": "15.2.4",
@@ -28,8 +29,8 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/react": "^19.1.1",
+    "@types/react-dom": "^19.1.2",
     "eslint": "^9",
     "eslint-config-next": "15.2.4",
     "typescript": "^5"

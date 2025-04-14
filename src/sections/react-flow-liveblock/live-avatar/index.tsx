@@ -1,3 +1,4 @@
+import { useAuth } from "@/context/AuthContext";
 import { useOthers } from "@liveblocks/react/suspense";
 import { Avatar, AvatarGroup, Box } from "@mui/material";
 
@@ -14,6 +15,8 @@ const COLORS = [
 
 export function LiveAvatars() {
   const users = useOthers();
+  const { user }: any = useAuth();
+
   return (
     <Box sx={{ display: "flex" }}>
       <AvatarGroup max={4}>
@@ -23,7 +26,7 @@ export function LiveAvatars() {
             alt={`${connectionId}`}
             sx={{ bgcolor: COLORS[connectionId % COLORS.length] }}
           >
-            {connectionId}
+            {user?.email[0] ?? connectionId}
           </Avatar>
         ))}
       </AvatarGroup>

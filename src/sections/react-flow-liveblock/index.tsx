@@ -12,6 +12,7 @@ import "@xyflow/react/dist/style.css";
 import { useReactFlow } from "./use-react-flow";
 import { CollaborativeComments } from "./comments";
 import { LiveAvatars } from "./live-avatar";
+import { useAuth } from "@/context/AuthContext";
 
 // Diffrent Colors for users cursors
 const COLORS = [
@@ -87,7 +88,7 @@ export function ReactFlowLiveBlock() {
   const others = useOthers();
   const userCount = others.length;
   const updateMyPresence = useUpdateMyPresence();
-
+  const { user }: any = useAuth();
   return (
     <div
       style={{ width: "100vw", height: "100vh" }}
@@ -99,7 +100,7 @@ export function ReactFlowLiveBlock() {
       {others.map(({ connectionId, presence }: any) =>
         presence.cursor ? (
           <Cursor
-            connectionId={connectionId}
+            connectionId={user?.email ?? connectionId}
             key={connectionId}
             x={presence.cursor.x}
             y={presence.cursor.y}
