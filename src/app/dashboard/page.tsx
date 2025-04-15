@@ -10,7 +10,7 @@ import { Box, CircularProgress, Container, CssBaseline } from "@mui/material";
 
 export default function DashboardPage() {
   const { user, loading } = useAuth();
-
+  console.log(user);
   const router = useRouter();
 
   //     const handleLogout = async () => {

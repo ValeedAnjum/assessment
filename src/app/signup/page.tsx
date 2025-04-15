@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signUp } from "@/lib/auth";
+import { createUserPermission, signUp } from "@/lib/auth";
 import Link from "next/link";
 import {
   Box,
@@ -38,9 +38,11 @@ export default function SignupPage() {
     try {
       setError("");
       setLoading(true);
-      await signUp(email, password);
+      const user = await signUp(email, password);
+      await createUserPermission(user?.user);
       router.push("/dashboard");
     } catch (err) {
+      console.log(error);
       setError((err as Error).message);
       setLoading(false);
     }
